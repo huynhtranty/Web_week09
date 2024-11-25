@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Attendees</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+</head>
+<body>
+  <div id="app" class="container">
+    <div class="col-12">
+        <nav class="alert alert-info text-light mt-2">
+            <a href="./">
+                <i class="fa-solid fa-house" style="font-size: 30px;"></i>
+            </a>
+        </nav>
+    </div>
+    <div class="col-12"> 
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Attend</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(attendee, index) in attendees" :key="attendee.id">
+            <td>{{ index + 1 }}</td>
+            <th scope="row">{{ attendee.name }}</th>
+            <td>{{ attendee.email }}</td>
+            <td>{{ attendee.attendance ? 'yes' : 'no' }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <a href="./" class="btn btn-primary">Go Home</a>
+    </div>
+  </div>
+  
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        attendees: []
+      },
+      mounted() {
+        this.fetchAttendees();
+      },
+      methods: {
+        fetchAttendees() {
+          fetch('/registrations')
+            .then(response => response.json())
+            .then(data => {
+              this.attendees = data;
+            })
+            .catch(error => {
+              console.error('Error fetching attendees:', error);
+              alert('Failed to load attendees');
+            });
+        }
+      }
+    });
+  </script>
+</body>
+</html>
